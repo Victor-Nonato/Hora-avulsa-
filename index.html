@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Relatório</title>
+  <script>
+    async function buscarRelatorio() {
+      const codigo = document.getElementById('codigoBarras').value;
+      if (!codigo) {
+        alert("Digite o código de barras.");
+        return;
+      }
+      try {
+        const response = await fetch(`/api/buscar-relatorio?codigo=${codigo}`);
+        const data = await response.json();
+        if (data.sucesso) {
+          document.getElementById('relatorio').innerHTML = JSON.stringify(data.resultado, null, 2);
+        } else {
+          document.getElementById('relatorio').innerHTML = "Relatório não encontrado.";
+        }
+      } catch (error) {
+        console.error("Erro ao buscar relatório:", error);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Consultar Relatório por Código de Barras</h1>
+  <label for="codigoBarras">Código de Barras:</label>
+  <input type="text" id="codigoBarras">
+  <button onclick="buscarRelatorio()">Buscar</button>
+
+  <pre id="relatorio"></pre>
+</body>
+</html>
